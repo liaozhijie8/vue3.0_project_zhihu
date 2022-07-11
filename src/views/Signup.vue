@@ -10,7 +10,7 @@
       <label for="exampleInputPassword1" class="form-label">密码</label>
       <ValidateInput type="password" placeholder="请输入密码" :rules="passwordRules" v-model="passwordVal"></ValidateInput>
     </div>
-    <button type="submit" class="btn btn-primary" @click.prevent="submitData">注册</button>
+    <button type="submit" class="btn btn-primary" @click.prevent="submitData">登录</button>
   </form>
 </template>
 
