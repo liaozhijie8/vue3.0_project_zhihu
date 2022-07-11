@@ -1,9 +1,9 @@
 <template>
   <form>
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">用户名</label>
+      <label for="signUser" class="form-label">用户名</label>
       <!-- 因为子组件中定义了modelValue属性值，所以这里采用了v-model属性即可实现双向绑定 -->
-      <ValidateInput type='text' ref="formRef" placeholder="请输入邮箱地址" :rules="emailRules" v-model="emailVal" >
+      <ValidateInput type='text' ref="formRef" placeholder="请输入邮箱地址" :rules="emailRules" v-model="emailVal" lable-form="signUser">
       </ValidateInput>
     </div>
     <div class="mb-3">
