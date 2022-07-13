@@ -22,8 +22,9 @@ export interface ColumnProps {
 }
 /* 验证表单的接口 */
 export interface RuleProps {
-  type: 'required' | 'email' | 'range';
+  type: 'required' | 'email' | 'range' | 'custom';
   message: string
+  validator?:()=>boolean
 }
 /* 文章细节接口 */
 export interface PostProps {

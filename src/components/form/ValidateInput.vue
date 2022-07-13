@@ -75,6 +75,10 @@ export default defineComponent({
               // 测试是否通过正则表达式
               passed = inputRef.val.trim().length >= 6 && inputRef.val.trim().length <= 12
               break
+            case 'custom':
+              // 测试密码是否一致
+              passed = rule.validator ? rule.validator() : true
+              break
             default:
               break
           }
