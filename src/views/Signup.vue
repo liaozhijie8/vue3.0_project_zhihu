@@ -1,5 +1,5 @@
 <template>
-  <Message type="success" message="登录成功,2秒后跳转主页" v-if="isVisible"></Message>
+  <Message type="success" message="注册成功,2秒后跳转主页" v-if="isVisible"></Message>
   <form>
     <div class="mb-3">
       <label for="signEmail" class="form-label">邮箱地址</label>
@@ -36,6 +36,8 @@ import { defineComponent, ref } from 'vue'
 import ValidateInput, { RulesProp } from '@/components/form/ValidateInput.vue'
 // 登录提示
 import Message from '@/components/main/Message.vue'
+import axios from 'axios'
+import router from '@/router/router'
 export default defineComponent({
   name: 'signup',
   // 注册组件
@@ -89,7 +91,23 @@ export default defineComponent({
     const onSignup = () => {
       // 验证是否全部输入通过
       const temp = formRef.value.validateInput() && userRef.value.validateInput() && passwordRef.value.validateInput() && againPasswordRef.value.validateInput()
-      console.log(temp)
+      if (temp) {
+        // 定义要发送给服务器的数据
+        const payload = {
+          email: emailVal.value,
+          password: passwordVal.value,
+          nickName: signUserVal.value
+        }
+        // 请求服务器的数据,注册新用户
+        axios.post('/users', payload).then(data => {
+          isVisible.value = temp
+          setTimeout(() => {
+            router.push('/login')
+          }, 2000)
+        }).catch(e => {
+          console.log(e)
+        })
+      }
     }
     return {
       emailRules,
