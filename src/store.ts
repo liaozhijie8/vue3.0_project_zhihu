@@ -69,6 +69,12 @@ const store = createStore<GlobalDataProps>({
     /* 改变错误信息状态 */
     setErrorStatus(state, rawData) {
       state.error.status = rawData
+    },
+    // 退出的函数
+    logOut(state) {
+      state.token = ''
+      localStorage.removeItem('token')
+      state.user = { isLogin: false }
     }
   },
   // 更改数据

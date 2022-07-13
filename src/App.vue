@@ -53,7 +53,7 @@ export default defineComponent({
         store.dispatch('fetchCurrentUser')
       }
     })
-    /* 错误信息处理组件设置 */
+    /* 错误信息处理组件设置(全局代理触发的) */
     const error = computed(() => store.state.error)
     const setError = (val: boolean) => {
       // 把vuex中的状态重置为false
