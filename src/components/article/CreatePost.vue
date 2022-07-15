@@ -1,6 +1,7 @@
 <template>
   <div class="create-post-page">
     <h4>新建文章</h4>
+    <input type="file" name="file" @change.prevent="handleFileChange">
     <div class="mb-3">
       <label class="form-label" for="titleForm">文章标题：</label>
       <ValidateInput :rules="titleRules" v-model="titleVal" placeholder="请输入文章标题" type="text" lable-form="titleForm">
@@ -9,7 +10,7 @@
     <div class="mb-3">
       <label class="form-label" for="detailForm">文章详情：</label>
       <validate-input rows="10" type="text" tag="textarea" placeholder="请输入文章详情" :rules="contentRules"
-        v-model="contentVal" lable-form="detailForm"/>
+        v-model="contentVal" lable-form="detailForm" />
     </div>
     <button class="btn btn-primary btn-large" @click.prevent="onFormSubmit">发表文章</button>
   </div>
@@ -21,6 +22,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { GlobalDataProps, PostProps } from '@/interface/interface'
 import ValidateInput, { RulesProp } from '@/components/form/ValidateInput.vue'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'createpost',
@@ -48,7 +50,6 @@ export default defineComponent({
         if (column) {
           // 填写改id下的参数对象
           const newPost: PostProps = {
-            _id: 'dd',
             title: titleVal.value,
             content: contentVal.value,
             column: column,
@@ -61,12 +62,30 @@ export default defineComponent({
         }
       }
     }
+    const handleFileChange = (e: Event) => {
+      // as 断言
+      const target = e.target as HTMLInputElement
+      const files = target.files
+      if (files) {
+        const uploadedFile = files[0]
+        const formData = new FormData()
+        formData.append(uploadedFile.name, uploadedFile)
+        axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then((resp: any) => {
+          console.log(resp)
+        })
+      }
+    }
     return {
       titleRules,
       titleVal,
       contentVal,
       contentRules,
-      onFormSubmit
+      onFormSubmit,
+      handleFileChange
     }
   }
 })

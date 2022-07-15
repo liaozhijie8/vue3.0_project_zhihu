@@ -24,11 +24,11 @@ export interface ColumnProps {
 export interface RuleProps {
   type: 'required' | 'email' | 'range' | 'custom';
   message: string
-  validator?:()=>boolean
+  validator?: () => boolean
 }
 /* 文章细节接口 */
 export interface PostProps {
-  _id: string
+  _id?: string
   title: string
   content?: string
   excerpt?: string
@@ -40,6 +40,12 @@ export interface PostProps {
 export interface GlobalErrorProps {
   status: boolean
   message?: string
+}
+/* 上传文章返回的数据接口 */
+export interface ResponseType {
+  code: number
+  msg: string
+  data: Record<string, unknown>
 }
 /* 全局接口-总的定义 */
 export interface GlobalDataProps {

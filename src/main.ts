@@ -9,6 +9,8 @@ import store from './store'
 axios.defaults.baseURL = 'http://apis.imooc.com/api/'
 // 下面的 icode 值是从慕课网获取的 token 值，可以在课程右侧的项目接口校验码找到
 axios.interceptors.request.use(config => {
+  // 设置消息状态
+  store.commit('setError', { status: false, message: '' })
   // get 请求，添加到 url 中
   config.params = { ...config.params, icode: '6A3213C684DA78CA' }
   // 其他请求，添加到 body 中
@@ -29,7 +31,6 @@ axios.interceptors.response.use(config => {
   store.commit('setLoading', false)
   return config
 }, e => {
-  console.log(e.response)
   const { error } = e.response.data
   store.commit('setError', { status: true, message: error })
   store.commit('setLoading', false)

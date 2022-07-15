@@ -1,5 +1,4 @@
 <template>
-  <Message type="success" message="注册成功,2秒后跳转主页" v-if="isVisible"></Message>
   <form>
     <div class="mb-3">
       <label for="signEmail" class="form-label">邮箱地址</label>
@@ -35,17 +34,16 @@ import { defineComponent, ref } from 'vue'
 // 导入验证组件
 import ValidateInput, { RulesProp } from '@/components/form/ValidateInput.vue'
 // 登录提示
-import Message from '@/components/main/Message.vue'
+import createMessage from '@/hooks/createMessage'
 import axios from 'axios'
 import router from '@/router/router'
 export default defineComponent({
   name: 'signup',
   // 注册组件
   components: {
-    ValidateInput,
-    Message
+    ValidateInput
   },
-  setup(props, context) {
+  setup() {
     // 消息提示开关
     const isVisible = ref(false)
     /* 双向数据绑定 */
@@ -99,8 +97,8 @@ export default defineComponent({
           nickName: signUserVal.value
         }
         // 请求服务器的数据,注册新用户
-        axios.post('/users', payload).then(data => {
-          isVisible.value = temp
+        axios.post('/users', payload).then(() => {
+          createMessage('注册成功,2秒后跳转登录', 'success')
           setTimeout(() => {
             router.push('/login')
           }, 2000)

@@ -35,9 +35,11 @@ const store = createStore<GlobalDataProps>({
     /* post请求的登录 */
     login(state, rawData) {
       const { token } = rawData.data
+      // 存到vuex中
       state.token = token
       // 将服务器token存在本地
       localStorage.setItem('token', token)
+      // 添加头部认证
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
     },
     // 添加文章

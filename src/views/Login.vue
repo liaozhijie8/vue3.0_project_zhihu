@@ -1,6 +1,5 @@
 <template>
   <div class="login">
-    <Message type="success" message="登录成功,2秒后跳转主页" v-if="isVisible"></Message>
     <LoginForms @form-submit="formData"></LoginForms>
   </div>
 </template>
@@ -8,7 +7,7 @@
 import { defineComponent, ref } from 'vue'
 import LoginForms from '@/components/form/ValidateForm.vue'
 // 登录提示
-import Message from '@/components/main/Message.vue'
+import createMessage from '@/hooks/createMessage'
 // 路由钩子函数
 import { useRouter } from 'vue-router'
 /* vuex代理状态 */
@@ -16,11 +15,9 @@ import { useStore } from 'vuex'
 export default defineComponent({
   name: 'login',
   components: {
-    LoginForms,
-    Message
+    LoginForms
   },
   setup() {
-    const isVisible = ref(false)
     const store = useStore()
     const router = useRouter()
     // 处理form发送过来的参数
@@ -34,9 +31,8 @@ export default defineComponent({
           password: password
         }
         store.dispatch('loginAndFetch', payload).then(() => {
-          isVisible.value = val
+          createMessage('登录成功!2秒后跳转主页', 'success', 2000)
           setTimeout(() => {
-            isVisible.value = false
             router.push('/')
           }, 2000)
         }).catch(e => {
@@ -46,8 +42,7 @@ export default defineComponent({
     }
     // 暴露属性
     return {
-      formData,
-      isVisible
+      formData
     }
   }
 })
