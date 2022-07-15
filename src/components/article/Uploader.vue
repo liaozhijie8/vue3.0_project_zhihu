@@ -1,10 +1,10 @@
 <template>
   <div class="file-upload">
-    <div class="file-upload-container" @click.prevent="triggerUpload">
+    <div class="file-upload-container" v-bind="$attrs" @click.prevent="triggerUpload">
       <slot v-if="fileStatus === 'loading'" name="loading">
         <button class="btn btn-primary" disabled>正在上传</button>
       </slot>
-      <slot v-else-if="fileStatus === 'success'" name="uploaded">
+      <slot v-else-if="fileStatus === 'success'" name="uploaded" :uploadedData="uploadedData">
         <button class="btn btn-primary" disabled>上传成功</button>
       </slot>
       <slot v-else name="default">
@@ -31,8 +31,11 @@ export default defineComponent({
       type: Function as PropType<CheckFunction>
     }
   },
+  inheritAttrs: false,
   emits: ['file-uploaded', 'file-uploaded-error'],
   setup(props, context) {
+    // slot中传给父组件的值
+    const uploadedData = ref()
     const fileInput = ref<null | HTMLInputElement>(null)
     const fileStatus = ref<UploadStatus>('ready')
     // 点击上传触发隐藏的上传input
@@ -70,6 +73,7 @@ export default defineComponent({
           }
         }).then((resp: any) => {
           fileStatus.value = 'success'
+          uploadedData.value = resp.data
           context.emit('file-uploaded', resp.data)
           console.log(resp)
         }).catch((error) => {
@@ -86,7 +90,8 @@ export default defineComponent({
       fileInput,
       triggerUpload,
       fileStatus,
-      handleFileChange
+      handleFileChange,
+      uploadedData
     }
   }
 })

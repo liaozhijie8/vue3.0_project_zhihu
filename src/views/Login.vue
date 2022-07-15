@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import LoginForms from '@/components/form/ValidateForm.vue'
 // 登录提示
 import createMessage from '@/hooks/createMessage'

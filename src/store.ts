@@ -1,4 +1,5 @@
 import { Commit, createStore } from 'vuex'
+import { arrToObj, objToArr } from './helper'
 // 导入数据
 import { headerData } from './testData'
 // 管理数据类型接口
@@ -8,6 +9,7 @@ import axios from 'axios'
 const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
   const { data } = await axios.get(url)
   commit(mutationName, data)
+  return data
 }
 // 封装一个post请求函数
 const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: any) => {
@@ -50,6 +52,7 @@ const store = createStore<GlobalDataProps>({
     fetchColumns(state, rawData) {
       state.columns = rawData.data.list
     },
+    /* 获取专栏 */
     fetchColumn(state, rawData) {
       state.columns = [rawData.data]
     },
@@ -77,6 +80,11 @@ const store = createStore<GlobalDataProps>({
       state.token = ''
       localStorage.removeItem('token')
       state.user = { isLogin: false }
+      delete axios.defaults.headers.common.Authorization
+    },
+    /* 获取文章详情页面数据 */
+    fetchPostDetail(state, rawData) {
+      state.posts = rawData.data
     }
   },
   // 更改数据
@@ -87,29 +95,37 @@ const store = createStore<GlobalDataProps>({
          commit('fetchColumns', data)
        }, */
     fetchColumns({ commit }) {
-      getAndCommit('/columns', 'fetchColumns', commit)
+      return getAndCommit('/columns', 'fetchColumns', commit)
     },
     // 获取专栏文章
     fetchColumn({ commit }, cid) {
-      getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
+      return getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
     },
     // 获取指定id专栏
     fetchPosts({ commit }, cid) {
-      getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
+      return getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
     },
     /* 登录的函数 */
     login({ commit }, payload) {
       return postAndCommit('/user/login', 'login', commit, payload)
     },
+    /* 新建文章的函数 */
+    createPost({ commit }, payload) {
+      return postAndCommit('/posts', 'cretatPost', commit, payload)
+    },
     /* 获取当前用户信息 */
     fetchCurrentUser({ commit }) {
-      getAndCommit('/user/current', 'fetchCurrentUser', commit)
+      return getAndCommit('/user/current', 'fetchCurrentUser', commit)
     },
     /* 组合actions */
     loginAndFetch({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => {
         return dispatch('fetchCurrentUser')
       })
+    },
+    /* 获取文章详情页面 */
+    fetchPostDetail({ commit }, cid) {
+      return getAndCommit(`/posts/${cid}`, 'fetchPostDetail', commit)
     }
 
   },
