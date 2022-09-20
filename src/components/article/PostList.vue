@@ -4,7 +4,6 @@
       <!-- 为每张卡片绑定一个点击事件路由 -->
       <div class="card-body" @click="toPostDetail(post._id)">
         <h4>{{ post.title }}</h4>
-        <span>{{ post._id }}</span>
         <div class="row my-3 align-items-center">
           <div v-if="post.image && typeof post.image !== 'string'" class="col-3">
             <img :src="post.image.url" :alt="post.title" class="rounded-lg w-100">

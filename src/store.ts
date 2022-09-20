@@ -1,5 +1,4 @@
 import { Commit, createStore } from 'vuex'
-import { arrToObj, objToArr } from './helper'
 // 导入数据
 import { headerData } from './testData'
 // 管理数据类型接口
