@@ -19,6 +19,7 @@ import { GlobalDataProps } from '@/interface/interface'
 import { defineComponent, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import PostList from '@/components/article/PostList.vue'
+import { generateFitUrl } from '@/helper'
 export default defineComponent({
   components: {
     PostList
@@ -35,7 +36,13 @@ export default defineComponent({
       store.dispatch('fetchPosts', currentId)
     })
     // 获取testData数据,找出当前id的专栏，处理好数据传给组件渲染
-    const column = computed(() => store.getters.getColumnById(currentId))
+    const column = computed(() => {
+      const selectColumn = store.getters.getColumnById(currentId)
+      if (selectColumn) {
+        generateFitUrl(selectColumn, 100, 100)
+      }
+      return selectColumn
+    })
     // 找出当前id的文章细节数据
     const list = computed(() => store.getters.getPostsByCid(currentId))
     return {

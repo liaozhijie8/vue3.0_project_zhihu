@@ -1,13 +1,25 @@
 <template>
   <div class="row">
-    <div v-for="column in columnlist" :key="column._id" class="col-12 col-sm-6 col-xl-3 mb-4 text-center mt-2">
+    <div
+      v-for="column in columnlist"
+      :key="column._id"
+      class="col-12 col-sm-6 col-xl-3 mb-4 text-center mt-2"
+    >
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
           <!-- src 当url存在的时候替换 -->
-          <img :src="column.avatar && column.avatar.url" class="card-img-top img-fluid" :alt="column.title" >
+          <img
+            :src="column.avatar && column.avatar.url"
+            class="card-img-top img-fluid"
+            :alt="column.title"
+          />
           <h5 class="card-title">{{ column.title }}</h5>
           <p class="card-text text-start">{{ column.description }}</p>
-          <router-link :to="`/column/${column._id}`" class="btn btn-outline-primary">进入专栏</router-link>
+          <router-link
+            :to="`/column/${column._id}`"
+            class="btn btn-outline-primary"
+            >进入专栏</router-link
+          >
         </div>
         <div class="card-footer">
           <small class="text-muted">Last updated 3 mins ago</small>
@@ -17,7 +29,7 @@
   </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
 // 导入定义props的接口
 import { ColumnProps } from '@/interface/interface'
@@ -36,7 +48,7 @@ export default defineComponent({
     // 计算属性是否有自带的头像图片
     const columnlist = computed(() => {
       // 取到list属性，进行处理
-      return props.list.map(column => {
+      return props.list.map((column) => {
         if (!column.avatar) {
           column.avatar = {
             url: require('@/assets/logo.png')
@@ -55,8 +67,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .card-body img{
-    height: 50px;
-    width: 50px;
-  }
+.card-body img {
+  height: 50px;
+  width: 50px;
+}
 </style>

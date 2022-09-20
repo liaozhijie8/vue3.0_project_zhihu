@@ -2,7 +2,7 @@
 export interface UserProps {
   isLogin: boolean
   nickName?: string
-  _id?: number
+  _id?: string
   column?: string
   email?: string
 }
@@ -12,6 +12,7 @@ export interface ImageProps {
   _id?: string
   url?: string
   createdAt?: string
+  fitUrl?: string
 }
 export interface ColumnProps {
   _id: string
@@ -32,9 +33,10 @@ export interface PostProps {
   title: string
   content?: string
   excerpt?: string
-  image?: ImageProps
-  createdAt: string
+  image?: ImageProps | string
+  createdAt?: string
   column: string
+  author?:string
 }
 /* 错误信息的提示接口 */
 export interface GlobalErrorProps {
@@ -42,17 +44,17 @@ export interface GlobalErrorProps {
   message?: string
 }
 /* 上传文章返回的数据接口 */
-export interface ResponseType {
+export interface ResponseType<P = Record<string, unknown>> {
   code: number
   msg: string
-  data: Record<string, unknown>
+  data: P
 }
 /* 全局接口-总的定义 */
 export interface GlobalDataProps {
   error: GlobalErrorProps
   token: string
   loading: boolean
-  columns: ColumnProps[];
-  posts: PostProps[];
-  user: UserProps;
+  columns: ColumnProps[]
+  posts: PostProps[]
+  user: UserProps
 }

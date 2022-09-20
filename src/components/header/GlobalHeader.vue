@@ -1,5 +1,4 @@
 <template>
-  <Message type="success" message="退出成功,2秒后跳转主页" v-if="isVisible"></Message>
   <!-- 导航栏 -->
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
     <!-- 图标 -->
@@ -18,7 +17,7 @@
     <div v-else>
       <DropDown :user="user">
         <DropDownItem>
-          <router-link to="/create" class="dropdown-item">新建文章</router-link>
+          <a class="dropdown-item" @click.prevent="myColumn">我的专栏</a>
         </DropDownItem>
         <DropDownItem disabled><a class="dropdown-item">管理文章</a></DropDownItem>
         <DropDownItem>
@@ -30,14 +29,14 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType } from 'vue'
 // 导入一个接口类型
 import { UserProps } from '@/interface/interface'
 // 导入下拉组件
 import DropDown from '@/components/dropdown/DropDown.vue'
 import DropDownItem from '@/components/dropdown/DropDownItem.vue'
 // 登录提示
-import Message from '@/components/main/Message.vue'
+import createMessage from '@/hooks/createMessage'
 import store from '@/store'
 import router from '@/router/router'
 export default defineComponent({
@@ -45,8 +44,7 @@ export default defineComponent({
   /* 组件注册区域 */
   components: {
     DropDown,
-    DropDownItem,
-    Message
+    DropDownItem
   },
   props: {
     user: {
@@ -54,19 +52,22 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
-    const isVisible = ref(false)
+  setup(props) {
+    /* 我的专栏 */
+    const myColumn = () => {
+      router.push(`/column/${props.user.column}`)
+    }
+    /* 退出登录 */
     const logOut = () => {
-      isVisible.value = true
+      createMessage('退出成功,2秒后跳转主页', 'success', 2000)
       setTimeout(() => {
         store.commit('logOut')
-        isVisible.value = false
         router.push('/')
       }, 2000)
     }
     return {
       logOut,
-      isVisible
+      myColumn
     }
   }
 })
